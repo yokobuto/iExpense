@@ -25,31 +25,51 @@ struct ContentView: View {
             
             List{
                 
-                ForEach(expenseManager.expenses){ expense in
-            
-                    ZStack{
+                Section("Personal"){
+                    
+                    ForEach(expenseManager.expenses.filter{ $0.type == .personal }  ){ expense in
                         ZStack{
-                            Circle()
-                                .fill(expense.type == .personal ? .green : .red)
-                                .frame(width: 30)
-                            Text(expense.type == .business ? "B" : "P")
-                                .foregroundStyle(.white)
+                            ZStack{
+                                Circle()
+                                    .fill(expense.type == .personal ? .green : .red)
+                                    .frame(width: 30)
+                                Text(expense.type == .business ? "B" : "P")
+                                    .foregroundStyle(.white)
+                            }
+                            
+                            HStack{
+                                Text("\(expense.name)")
+                                Spacer()
+                                Text(expense.amount, format: .currency(code: "EUR"))
+                            }
                         }
-                        
-                        HStack{
-                            Text("\(expense.name)")
-                            Spacer()
-                            Text(expense.amount, format: .currency(code: "EUR"))
+                    }.onDelete(perform: expenseManager.removeExpense)
+                    
+                }
+                
+                
+                Section("Business"){
+                    
+                    ForEach(expenseManager.expenses.filter{ $0.type == .business }  ){ expense in
+                        ZStack{
+                            ZStack{
+                                Circle()
+                                    .fill(expense.type == .personal ? .green : .red)
+                                    .frame(width: 30)
+                                Text(expense.type == .business ? "B" : "P")
+                                    .foregroundStyle(.white)
+                            }
+                            
+                            HStack{
+                                Text("\(expense.name)")
+                                Spacer()
+                                Text(expense.amount, format: .currency(code: "EUR"))
+                            }
                         }
-                        
-                    }
-                     
-                     
+                    }.onDelete(perform: expenseManager.removeExpense)
                     
-                    
-                    
-                    
-                }.onDelete(perform: expenseManager.removeExpense)
+                }
+                
                 
                 
             }.navigationTitle("iExpense")
